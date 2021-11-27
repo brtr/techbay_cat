@@ -39,3 +39,9 @@ npx hardhat run scripts/mint.js
 To deploy to Polygon test or main networks, update the configurations located in __.env__ to use a private key and, optionally, deploy to a private RPC like Infura or Alchemy.
 
 
+### Verify contract
+[guide](https://forum.openzeppelin.com/t/verify-erc20-token-on-etherscan-that-was-deployed-through-remix-step-by-step-guide/9051)
+
+
+
+
