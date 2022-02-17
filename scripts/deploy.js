@@ -1,12 +1,13 @@
 const hre = require("hardhat");
 async function main() {
-  const { OWNER_ADDRESS, METADATA_URI } = process.env
-  const NFT = await hre.ethers.getContractFactory("TechBayTest");
-  const nft = await NFT.deploy("TechBayTest", "TBBT", OWNER_ADDRESS);   //CONTRACT INFO
+  const NFT = await hre.ethers.getContractFactory("SampleToken");
+  let nft = await NFT.deploy("SampleToken", "STT");   //CONTRACT INFO
   await nft.deployed();
-  const contract = NFT.attach(nft.address);
-  await contract.setBaseURI(METADATA_URI);
-  console.log("Contract deployed to:", nft.address);
+  console.log("Sample token deployed to:", nft.address);
+
+  nft = await NFT.deploy("SampleToken2", "STT");   //CONTRACT INFO
+  await nft.deployed();
+  console.log("Sample token 2 deployed to:", nft.address);
 }
 main().then(() => process.exit(0)).catch(error => {
   console.error(error);
