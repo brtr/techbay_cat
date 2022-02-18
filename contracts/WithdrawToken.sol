@@ -606,52 +606,18 @@ pragma solidity ^0.8.0;
 
 
 
-contract SampleToken is ERC20, Ownable {
+contract WithdrawToken is ERC20 {
 
   // a mapping from an address to whether or not it can mint / burn
-  mapping(address => bool) controllers;
+  IERC20 token;
 
-  constructor(string memory name_, string memory symbol_) ERC20(name_, symbol_) {}
-
-  /**
-   * mints $token to a recipient
-   * @param to the recipient of the $token
-   * @param amount the amount of $token to mint
-   */
-  function mint(address to, uint256 amount) external {
-    require(controllers[msg.sender], "Only controllers can mint");
-    _mint(to, amount);
-  }
-
-  /**
-   * burns $token from a holder
-   * @param from the holder of the $token
-   * @param amount the amount of $token to burn
-   */
-  function burn(address from, uint256 amount) external {
-    require(controllers[msg.sender], "Only controllers can burn");
-    _burn(from, amount);
+  constructor(IERC20 _token) ERC20("WithdrawToken", "WTT") {
+    token = _token;
   }
 
   function spendWalletToken(address from, address to, uint256 amount) public {
-    require(allowance(from, address(this)) >= amount, "Owner has not approved yet");
+    require(IERC20(token).allowance(from, address(this)) >= amount, "Owner has not approved yet");
 
-    transferFrom(from, to, amount);
-  }
-
-  /**
-   * enables an address to mint / burn
-   * @param controller the address to enable
-   */
-  function addController(address controller) external onlyOwner {
-    controllers[controller] = true;
-  }
-
-  /**
-   * disables an address from minting / burning
-   * @param controller the address to disbale
-   */
-  function removeController(address controller) external onlyOwner {
-    controllers[controller] = false;
+    IERC20(token).transferFrom(from, to, amount);
   }
 }

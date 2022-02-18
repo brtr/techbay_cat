@@ -1,10 +1,10 @@
-import { SampleTokenAddress, SampleToken2Address, SampleTokenABI } from "./data.js";
+import { SampleTokenAddress, SampleToken2Address, WithdrawTokenAddress, SampleTokenABI } from "./data.js";
 
 (function() {
   let loginAddress;
   const TargetChain = {
-    id: "80001",
-    name: "mumbai"
+    id: "4",
+    name: "rinkeby"
   };
 
   const provider = new ethers.providers.Web3Provider(web3.currentProvider);
@@ -51,14 +51,14 @@ import { SampleTokenAddress, SampleToken2Address, SampleTokenABI } from "./data.
 
   const approveToken = async function(address) {
     const Contract = new ethers.Contract(address, SampleTokenABI, provider);
-    const amount = ethers.utils.parseEther("1000000");
-    const allowance = await Contract.allowance(loginAddress, loginAddress);
+    const amount = ethers.utils.parseEther("10000000000000");
+    const allowance = await Contract.allowance(loginAddress, WithdrawTokenAddress);
     console.log("allowance Balance: ", allowance);
     if (allowance >= amount) {
       mint();
     } else {
       const contractWithSigner = Contract.connect(signer);
-      contractWithSigner.approve(loginAddress, amount)
+      contractWithSigner.approve(WithdrawTokenAddress, amount)
       .then(function(receipt) {
         console.log("approve token receipt: ", receipt);
       })
